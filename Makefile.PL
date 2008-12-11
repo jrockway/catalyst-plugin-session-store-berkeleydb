@@ -7,12 +7,11 @@ requires 'BerkeleyDB::Manager';
 requires 'Catalyst::Runtime';
 requires 'Catalyst::Plugin::Session';
 requires 'Class::Data::Inheritable';
-requires 'File::Remove';
 requires 'Scalar::Util';
 requires 'Storable';
 requires 'namespace::clean';
 
-build_requires 'Directory::Scratch';
+build_requires 'File::Remove';
 build_requires 'Test::WWW::Mechanize::Catalyst';
 build_requires 'Test::More';
 build_requires 'ok';
