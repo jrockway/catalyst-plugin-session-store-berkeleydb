@@ -49,7 +49,6 @@ sub get_session_data {
     my $data;
     my $status = $c->$_db->db_get($id, $data);
 
-
     if($data && !$status) {
         if($id =~ /^expires:/){
             return $data;
@@ -67,7 +66,6 @@ sub store_session_data {
 
 sub delete_session_data {
     my ($c, $id) = @_;
-    warn "deleting $id";
     $c->$_db->db_del($id);
 }
 
@@ -84,7 +82,6 @@ sub delete_expired_sessions {
         my $all = $db->db_cursor;
         while( 0 == $all->c_get( $key, $value, DB_NEXT ) ){
             if($key =~ /^expires:(.+)$/){
-                warn "$1 expires at $value, now ". time;
                 $to_delete{$1} = 1 if time > $value;
             }
         }
@@ -93,7 +90,6 @@ sub delete_expired_sessions {
         $all = $db->db_cursor;
         while( 0 == $all->c_get( $key, $value, DB_NEXT ) ){
             my ($name, $id) = split /:/, $key;
-            warn "second time: $key";
             $all->c_del() and warn "bye, $key" if $to_delete{$id};
         };
     });
