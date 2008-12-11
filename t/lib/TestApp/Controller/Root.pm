@@ -21,4 +21,22 @@ sub delete :Local {
     $c->res->body( 'ok' );
 }
 
+sub flash_set :Local {
+    my ($self, $c) = @_;
+    $c->flash->{foo} = 'OH HAI';
+    $c->res->body( 'ok' );
+};
+
+sub flash_get :Local {
+    my ($self, $c) = @_;
+    $c->res->body( $c->flash->{foo} || 'NOTHING' );
+}
+
+sub cleanup :Local {
+    my ($self, $c) = @_;
+    my $dir = Catalyst::Utils::class2tempdir(ref $c);
+    require File::Remove;
+    File::Remove::remove( \1, $dir );
+    $c->res->body( 'ok' );
+  }
 1;
