@@ -2,6 +2,7 @@ package Catalyst::Plugin::Session::Store::BerkeleyDB;
 use strict;
 use warnings;
 
+use MRO::Compat;
 use BerkeleyDB;
 use BerkeleyDB::Manager;
 use Storable qw(nfreeze thaw);
@@ -41,6 +42,8 @@ sub setup_session {
 
     $app->$_manager($manager);
     $app->$_db($db);
+
+    return $app->maybe::next::method(@_);
 }
 
 sub get_session_data {
