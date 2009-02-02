@@ -4,9 +4,10 @@ name 'Catalyst-Plugin-Session-Store-BerkeleyDB';
 all_from 'lib/Catalyst/Plugin/Session/Store/BerkeleyDB.pm';
 
 requires 'BerkeleyDB::Manager';
-requires 'Catalyst::Runtime';
 requires 'Catalyst::Plugin::Session';
+requires 'Catalyst::Runtime';
 requires 'Class::Data::Inheritable';
+requires 'MRO::Compat';
 requires 'Scalar::Util';
 requires 'Storable';
 requires 'namespace::clean';
