@@ -10,7 +10,7 @@ use Scalar::Util qw(blessed);
 use Catalyst::Utils;
 use namespace::clean;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 use base 'Class::Data::Inheritable', 'Catalyst::Plugin::Session::Store';
 

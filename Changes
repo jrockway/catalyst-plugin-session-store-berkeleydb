@@ -1,4 +1,6 @@
-0.01        Thu Dec 11 04:33:50 CST 2008
+0.02 Mon Feb  2 11:24:32 CST 2009
+      - unfuck apps where the session store is loaded
+        before the session state plugin (rafl)
+
+0.01 Thu Dec 11 04:33:50 CST 2008
       - initial release
-
-
