@@ -2,7 +2,7 @@ package TestApp;
 use strict;
 use warnings;
 
-use Catalyst qw/Session Session::State::Cookie Session::Store::BerkeleyDB/;
+use Catalyst qw/Session Session::Store::BerkeleyDB Session::State::Cookie/;
 
 __PACKAGE__->config( session => {
     expires => 50,
