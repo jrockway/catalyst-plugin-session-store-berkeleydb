@@ -8,6 +8,8 @@ use BerkeleyDB::Manager;
 use Storable qw(nfreeze thaw);
 use Scalar::Util qw(blessed);
 use Catalyst::Utils;
+use Carp qw(confess);
+
 use namespace::clean;
 
 our $VERSION = '0.02';
@@ -46,14 +48,25 @@ sub setup_session {
     return $app->maybe::next::method(@_);
 }
 
+sub _data_is_raw {
+    my ($c, $id, $data) = @_;
+    return 1 if $id =~ /^expires:/;
+    return 0;
+}
+
 sub get_session_data {
     my ($c, $id) = @_;
 
     my $data;
-    my $status = $c->$_db->db_get($id, $data);
+    $c->$_manager->txn_do(sub {
+        my $status = $c->$_db->db_get($id, $data);
 
-    if($data && !$status) {
-        if($id =~ /^expires:/){
+        confess "BerkeleyDB error while fetching data: $BerkeleyDB::Error ($status)"
+          if $status;
+    });
+
+    if($data) {
+        if($c->_data_is_raw($id)){
             return $data;
         }
         return thaw($data);
@@ -63,13 +76,17 @@ sub get_session_data {
 
 sub store_session_data {
     my ($c, $id, $data) = @_;
-    my $frozen = ref $data ? nfreeze($data) : $data;
-    $c->$_db->db_put($id, $frozen);
+    my $frozen = $c->_data_is_raw($id) ? $data : nfreeze($data);
+    $c->$_manager->txn_do(sub {
+        $c->$_db->db_put($id, $frozen);
+    });
 }
 
 sub delete_session_data {
     my ($c, $id) = @_;
-    $c->$_db->db_del($id);
+    $c->$_manager->txn_do(sub {
+        $c->$_db->db_del($id);
+    });
 }
 
 sub delete_expired_sessions {
